@@ -75,10 +75,12 @@ typedef std::unique_ptr<IntegrationCodecClient> IntegrationCodecClientPtr;
 /**
  * Test fixture for HTTP and HTTP/2 integration tests.
  */
-class HttpIntegrationTest : public BaseIntegrationTest {
+template <typename TimeSystem> class HttpIntegrationTest : public BaseIntegrationTest {
+  static_assert(std::is_base_of<Event::TestTimeSystem, TimeSystem>::value, "TODO");
+
 public:
   HttpIntegrationTest(Http::CodecClient::Type downstream_protocol,
-                      Network::Address::IpVersion version, TestTimeSystemPtr time_system,
+                      Network::Address::IpVersion version,
                       const std::string& config = ConfigHelper::HTTP_PROXY_CONFIG);
   virtual ~HttpIntegrationTest();
 

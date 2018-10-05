@@ -6,11 +6,10 @@
 
 namespace Envoy {
 
-class CorsFilterIntegrationTest : public HttpIntegrationTest,
+class CorsFilterIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                                   public testing::TestWithParam<Network::Address::IpVersion> {
 public:
-  CorsFilterIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {}
+  CorsFilterIntegrationTest() : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   void initialize() override {
     config_helper_.addFilter("name: envoy.cors");

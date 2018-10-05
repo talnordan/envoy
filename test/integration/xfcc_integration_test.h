@@ -16,7 +16,7 @@ using testing::NiceMock;
 namespace Envoy {
 namespace Xfcc {
 
-class XfccIntegrationTest : public HttpIntegrationTest,
+class XfccIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                             public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   const std::string previous_xfcc_ =
@@ -31,8 +31,7 @@ public:
   const std::string client_uri_san_ = "URI=spiffe://lyft.com/frontend-team";
   const std::string client_dns_san_ = "DNS=lyft.com;DNS=www.lyft.com";
 
-  XfccIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {}
+  XfccIntegrationTest() : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   void initialize() override;
   void createUpstreams() override;

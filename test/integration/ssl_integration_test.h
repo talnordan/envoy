@@ -16,11 +16,10 @@ using testing::NiceMock;
 namespace Envoy {
 namespace Ssl {
 
-class SslIntegrationTest : public HttpIntegrationTest,
+class SslIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                            public testing::TestWithParam<Network::Address::IpVersion> {
 public:
-  SslIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {}
+  SslIntegrationTest() : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   void initialize() override;
 

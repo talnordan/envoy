@@ -150,11 +150,11 @@ route_config:
 } // namespace
 
 class HeaderIntegrationTest
-    : public HttpIntegrationTest,
+    : public HttpIntegrationTest<Event::TestRealTimeSystem>,
       public testing::TestWithParam<std::tuple<Network::Address::IpVersion, bool>> {
 public:
   HeaderIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, std::get<0>(GetParam()), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, std::get<0>(GetParam())) {}
 
   bool routerSuppressEnvoyHeaders() const { return std::get<1>(GetParam()); }
 

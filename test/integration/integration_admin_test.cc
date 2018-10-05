@@ -411,11 +411,11 @@ TEST_P(IntegrationAdminTest, AdminCpuProfilerStart) {
 }
 #endif
 
-class IntegrationAdminIpv4Ipv6Test : public HttpIntegrationTest, public testing::Test {
+class IntegrationAdminIpv4Ipv6Test : public HttpIntegrationTest<Event::TestRealTimeSystem>,
+                                     public testing::Test {
 public:
   IntegrationAdminIpv4Ipv6Test()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, Network::Address::IpVersion::v4,
-                            realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, Network::Address::IpVersion::v4) {}
 
   void initialize() override {
     config_helper_.addConfigModifier(

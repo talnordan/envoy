@@ -207,6 +207,11 @@ public:
 protected:
   bool initialized() const { return initialized_; }
 
+  template <typename TimeSystem> static TestTimeSystemPtr timeSystem() {
+    // TODO(talnordan): `static_assert`
+    return std::make_unique<TimeSystem>();
+  }
+
   // The IpVersion (IPv4, IPv6) to use.
   Network::Address::IpVersion version_;
   // The config for envoy start-up.

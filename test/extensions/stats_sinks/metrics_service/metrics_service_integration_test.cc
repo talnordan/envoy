@@ -17,11 +17,11 @@ using testing::AssertionResult;
 namespace Envoy {
 namespace {
 
-class MetricsServiceIntegrationTest : public HttpIntegrationTest,
+class MetricsServiceIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                                       public Grpc::GrpcClientIntegrationParamTest {
 public:
   MetricsServiceIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, ipVersion(), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, ipVersion()) {}
 
   void createUpstreams() override {
     HttpIntegrationTest::createUpstreams();

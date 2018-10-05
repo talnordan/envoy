@@ -15,11 +15,11 @@
 namespace Envoy {
 
 class UdsUpstreamIntegrationTest
-    : public HttpIntegrationTest,
+    : public HttpIntegrationTest<Event::TestRealTimeSystem>,
       public testing::TestWithParam<std::tuple<Network::Address::IpVersion, bool>> {
 public:
   UdsUpstreamIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, std::get<0>(GetParam()), realTime()),
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, std::get<0>(GetParam())),
         abstract_namespace_(std::get<1>(GetParam())) {}
 
   void createUpstreams() override {
@@ -46,11 +46,11 @@ protected:
 };
 
 class UdsListenerIntegrationTest
-    : public HttpIntegrationTest,
+    : public HttpIntegrationTest<Event::TestRealTimeSystem>,
       public testing::TestWithParam<std::tuple<Network::Address::IpVersion, bool>> {
 public:
   UdsListenerIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, std::get<0>(GetParam()), realTime()),
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, std::get<0>(GetParam())),
         abstract_namespace_(std::get<1>(GetParam())) {}
 
   void initialize() override;

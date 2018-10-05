@@ -26,7 +26,7 @@ struct HttpProtocolTestParams {
 // TEST_P(MyTest, TestInstance) {
 // ....
 // }
-class HttpProtocolIntegrationTest : public HttpIntegrationTest,
+class HttpProtocolIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                                     public testing::TestWithParam<HttpProtocolTestParams> {
 public:
   // By default returns 8 combinations of
@@ -49,7 +49,7 @@ public:
   protocolTestParamsToString(const testing::TestParamInfo<HttpProtocolTestParams>& p);
 
   HttpProtocolIntegrationTest()
-      : HttpIntegrationTest(GetParam().downstream_protocol, GetParam().version, realTime()) {}
+      : HttpIntegrationTest(GetParam().downstream_protocol, GetParam().version) {}
 
   void SetUp() override {
     setDownstreamProtocol(GetParam().downstream_protocol);

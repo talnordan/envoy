@@ -13,11 +13,11 @@ struct WebsocketProtocolTestParams {
   bool old_style;
 };
 
-class WebsocketIntegrationTest : public HttpIntegrationTest,
+class WebsocketIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                                  public testing::TestWithParam<WebsocketProtocolTestParams> {
 public:
   WebsocketIntegrationTest()
-      : HttpIntegrationTest(GetParam().downstream_protocol, GetParam().version, realTime()) {}
+      : HttpIntegrationTest(GetParam().downstream_protocol, GetParam().version) {}
   void initialize() override;
   void SetUp() override {
     setDownstreamProtocol(GetParam().downstream_protocol);

@@ -15,11 +15,10 @@
 namespace Envoy {
 namespace {
 
-class LoadStatsIntegrationTest : public HttpIntegrationTest,
+class LoadStatsIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                                  public testing::TestWithParam<Network::Address::IpVersion> {
 public:
-  LoadStatsIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {
+  LoadStatsIntegrationTest() : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {
     // We rely on some fairly specific load balancing picks in this test, so
     // determinizie the schedule.
     setDeterministic();

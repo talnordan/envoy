@@ -31,11 +31,11 @@ public:
   }
 };
 
-class RatelimitIntegrationTest : public HttpIntegrationTest,
+class RatelimitIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                                  public RatelimitGrpcClientIntegrationParamTest {
 public:
   RatelimitIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, ipVersion(), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, ipVersion()) {}
 
   void SetUp() override { initialize(); }
 
