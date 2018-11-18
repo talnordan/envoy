@@ -23,6 +23,18 @@ envoy_cc_test_library(
 )
 
 envoy_cc_test_library(
+    name = "hang_filter_lib",
+    srcs = [
+        "hang_filter.cc",
+    ],
+    deps = [
+        "//include/envoy/registry",
+        "//source/extensions/filters/http/common:empty_http_filter_config_lib",
+        "//source/extensions/filters/http/common:pass_through_filter_lib",
+    ],
+)
+
+envoy_cc_test_library(
     name = "pause_filter_lib",
     srcs = [
         "pause_filter.cc",
