@@ -32,11 +32,11 @@ namespace Envoy {
 namespace Ssl {
 
 class SdsStaticDownstreamIntegrationTest
-    : public HttpIntegrationTest,
+    : public HttpIntegrationTest<Event::TestRealTimeSystem>,
       public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   SdsStaticDownstreamIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   void initialize() override {
     config_helper_.addConfigModifier([](envoy::config::bootstrap::v2::Bootstrap& bootstrap) {
@@ -107,11 +107,11 @@ TEST_P(SdsStaticDownstreamIntegrationTest, RouterRequestAndResponseWithGiantBody
 }
 
 class SdsStaticUpstreamIntegrationTest
-    : public HttpIntegrationTest,
+    : public HttpIntegrationTest<Event::TestRealTimeSystem>,
       public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   SdsStaticUpstreamIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   void initialize() override {
     config_helper_.addConfigModifier([](envoy::config::bootstrap::v2::Bootstrap& bootstrap) {

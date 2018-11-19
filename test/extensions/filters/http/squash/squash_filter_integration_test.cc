@@ -16,11 +16,11 @@ using Envoy::Protobuf::util::MessageDifferencer;
 
 namespace Envoy {
 
-class SquashFilterIntegrationTest : public HttpIntegrationTest,
+class SquashFilterIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                                     public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   SquashFilterIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   ~SquashFilterIntegrationTest() {
     if (fake_squash_connection_) {

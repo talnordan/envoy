@@ -10,11 +10,11 @@
 
 namespace Envoy {
 namespace {
-class TcpProxyIntegrationTest : public BaseIntegrationTest,
+class TcpProxyIntegrationTest : public BaseIntegrationTest<Event::TestRealTimeSystem>,
                                 public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   TcpProxyIntegrationTest()
-      : BaseIntegrationTest(GetParam(), realTime(), ConfigHelper::TCP_PROXY_CONFIG) {
+      : BaseIntegrationTest(GetParam(), ConfigHelper::TCP_PROXY_CONFIG) {
     enable_half_close_ = true;
   }
 

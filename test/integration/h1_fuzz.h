@@ -9,10 +9,10 @@
 
 namespace Envoy {
 
-class H1FuzzIntegrationTest : public HttpIntegrationTest {
+class H1FuzzIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem> {
 public:
   H1FuzzIntegrationTest(Network::Address::IpVersion version)
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, version, realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, version) {}
 
   void initialize() override;
   void replay(const test::integration::CaptureFuzzTestCase&);

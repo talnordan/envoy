@@ -60,12 +60,12 @@ admin:
       port_value: 0
 )EOF";
 
-class AdsIntegrationBaseTest : public HttpIntegrationTest {
+class AdsIntegrationBaseTest : public HttpIntegrationTest<Event::TestRealTimeSystem> {
 public:
   AdsIntegrationBaseTest(Http::CodecClient::Type downstream_protocol,
                          Network::Address::IpVersion version,
                          const std::string& config = ConfigHelper::HTTP_PROXY_CONFIG)
-      : HttpIntegrationTest(downstream_protocol, version, realTime(), config) {}
+      : HttpIntegrationTest(downstream_protocol, version, config) {}
 
   void createAdsConnection(FakeUpstream& upstream) {
     ads_upstream_ = &upstream;

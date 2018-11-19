@@ -111,11 +111,11 @@ public:
 
 } // namespace
 
-class TcpConnPoolIntegrationTest : public BaseIntegrationTest,
+class TcpConnPoolIntegrationTest : public BaseIntegrationTest<Event::TestRealTimeSystem>,
                                    public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   TcpConnPoolIntegrationTest()
-      : BaseIntegrationTest(GetParam(), realTime(), tcp_conn_pool_config),
+      : BaseIntegrationTest(GetParam(), tcp_conn_pool_config),
         filter_resolver_(config_factory_) {}
 
   // Called once by the gtest framework before any tests are run.

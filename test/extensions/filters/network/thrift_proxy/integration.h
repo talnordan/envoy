@@ -47,10 +47,10 @@ struct PayloadOptions {
   const std::vector<std::pair<std::string, std::string>> headers_;
 };
 
-class BaseThriftIntegrationTest : public BaseIntegrationTest {
+class BaseThriftIntegrationTest : public BaseIntegrationTest<Event::TestRealTimeSystem> {
 public:
   BaseThriftIntegrationTest()
-      : BaseIntegrationTest(Network::Address::IpVersion::v4, realTime(), thrift_config_) {}
+      : BaseIntegrationTest(Network::Address::IpVersion::v4, thrift_config_) {}
 
   /**
    * Given PayloadOptions, generate a client request and server response and store the

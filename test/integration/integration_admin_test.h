@@ -8,11 +8,11 @@
 
 namespace Envoy {
 
-class IntegrationAdminTest : public HttpIntegrationTest,
+class IntegrationAdminTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                              public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   IntegrationAdminTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   void initialize() override {
     config_helper_.addFilter(ConfigHelper::DEFAULT_HEALTH_CHECK_FILTER);

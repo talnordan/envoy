@@ -9,10 +9,10 @@ namespace Envoy {
 // This test loops through all of the json config files submitted as of
 // 11/10/2017 and verifies Envoy continues to load the json version of their
 // configuration.
-class LegacyJsonIntegrationTest : public BaseIntegrationTest,
+class LegacyJsonIntegrationTest : public BaseIntegrationTest<Event::TestRealTimeSystem>,
                                   public testing::TestWithParam<Network::Address::IpVersion> {
 public:
-  LegacyJsonIntegrationTest() : BaseIntegrationTest(GetParam(), realTime()) {}
+  LegacyJsonIntegrationTest() : BaseIntegrationTest(GetParam()) {}
 
   void SetUp() override {
     fake_upstreams_.emplace_back(

@@ -5,11 +5,11 @@
 #include "gtest/gtest.h"
 
 namespace Envoy {
-class Http2IntegrationTest : public HttpIntegrationTest,
+class Http2IntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                              public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   Http2IntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP2, GetParam(), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP2, GetParam()) {}
 
   void SetUp() override { setDownstreamProtocol(Http::CodecClient::Type::HTTP2); }
 

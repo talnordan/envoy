@@ -7,10 +7,10 @@ namespace Envoy {
 
 std::string echo_config;
 
-class EchoIntegrationTest : public BaseIntegrationTest,
+class EchoIntegrationTest : public BaseIntegrationTest<Event::TestRealTimeSystem>,
                             public testing::TestWithParam<Network::Address::IpVersion> {
 public:
-  EchoIntegrationTest() : BaseIntegrationTest(GetParam(), realTime(), echo_config) {}
+  EchoIntegrationTest() : BaseIntegrationTest(GetParam(), echo_config) {}
 
   // Called once by the gtest framework before any EchoIntegrationTests are run.
   static void SetUpTestCase() {

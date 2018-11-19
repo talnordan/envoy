@@ -23,11 +23,11 @@
 namespace Envoy {
 namespace {
 
-class HdsIntegrationTest : public HttpIntegrationTest,
+class HdsIntegrationTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                            public testing::TestWithParam<Network::Address::IpVersion> {
 public:
   HdsIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   void createUpstreams() override {
     fake_upstreams_.emplace_back(

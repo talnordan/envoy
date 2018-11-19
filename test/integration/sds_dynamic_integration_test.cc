@@ -39,11 +39,11 @@ const envoy::service::discovery::v2::SdsDummy _sds_dummy;
 // Sds integration base class with following support:
 // * functions to create sds upstream, and send sds response
 // * functions to create secret protobuf.
-class SdsDynamicIntegrationBaseTest : public HttpIntegrationTest,
+class SdsDynamicIntegrationBaseTest : public HttpIntegrationTest<Event::TestRealTimeSystem>,
                                       public Grpc::GrpcClientIntegrationParamTest {
 public:
   SdsDynamicIntegrationBaseTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, ipVersion(), realTime()),
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, ipVersion()),
         server_cert_("server_cert"), validation_secret_("validation_secret"),
         client_cert_("client_cert") {}
 

@@ -413,11 +413,10 @@ TEST_P(IntegrationAdminTest, AdminCpuProfilerStart) {
 }
 #endif
 
-class IntegrationAdminIpv4Ipv6Test : public HttpIntegrationTest, public testing::Test {
+class IntegrationAdminIpv4Ipv6Test : public HttpIntegrationTest<Event::TestRealTimeSystem>, public testing::Test {
 public:
   IntegrationAdminIpv4Ipv6Test()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, Network::Address::IpVersion::v4,
-                            realTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, Network::Address::IpVersion::v4) {}
 
   void initialize() override {
     config_helper_.addConfigModifier(
@@ -447,12 +446,12 @@ TEST_F(IntegrationAdminIpv4Ipv6Test, Ipv4Ipv6Listen) {
 // Testing the behavior of StatsMatcher, which allows/denies the  instantiation of stats based on
 // restrictions on their names.
 class StatsMatcherIntegrationTest
-    : public HttpIntegrationTest,
+    : public HttpIntegrationTest<Event::SimulatedTimeSystem>,
       public testing::Test,
       public testing::WithParamInterface<Network::Address::IpVersion> {
 public:
   StatsMatcherIntegrationTest()
-      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam(), simTime()) {}
+      : HttpIntegrationTest(Http::CodecClient::Type::HTTP1, GetParam()) {}
 
   void initialize() override {
     config_helper_.addConfigModifier(

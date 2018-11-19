@@ -191,118 +191,118 @@ void IntegrationCodecClient::ConnectionCallbacks::onEvent(Network::ConnectionEve
   }
 }
 
-IntegrationCodecClientPtr HttpIntegrationTest::makeHttpConnection(uint32_t port) {
-  return makeHttpConnection(makeClientConnection(port));
-}
+// IntegrationCodecClientPtr HttpIntegrationTest::makeHttpConnection(uint32_t port) {
+//   return makeHttpConnection(makeClientConnection(port));
+// }
 
-IntegrationCodecClientPtr
-HttpIntegrationTest::makeRawHttpConnection(Network::ClientConnectionPtr&& conn) {
-  std::shared_ptr<Upstream::MockClusterInfo> cluster{new NiceMock<Upstream::MockClusterInfo>()};
-  cluster->http2_settings_.allow_connect_ = true;
-  Upstream::HostDescriptionConstSharedPtr host_description{Upstream::makeTestHostDescription(
-      cluster, fmt::format("tcp://{}:80", Network::Test::getLoopbackAddressUrlString(version_)))};
-  return std::make_unique<IntegrationCodecClient>(*dispatcher_, std::move(conn), host_description,
-                                                  downstream_protocol_);
-}
+// IntegrationCodecClientPtr
+// HttpIntegrationTest::makeRawHttpConnection(Network::ClientConnectionPtr&& conn) {
+//   std::shared_ptr<Upstream::MockClusterInfo> cluster{new NiceMock<Upstream::MockClusterInfo>()};
+//   cluster->http2_settings_.allow_connect_ = true;
+//   Upstream::HostDescriptionConstSharedPtr host_description{Upstream::makeTestHostDescription(
+//       cluster, fmt::format("tcp://{}:80", Network::Test::getLoopbackAddressUrlString(version_)))};
+//   return std::make_unique<IntegrationCodecClient>(*dispatcher_, std::move(conn), host_description,
+//                                                   downstream_protocol_);
+// }
 
-IntegrationCodecClientPtr
-HttpIntegrationTest::makeHttpConnection(Network::ClientConnectionPtr&& conn) {
-  auto codec = makeRawHttpConnection(std::move(conn));
-  EXPECT_TRUE(codec->connected());
-  return codec;
-}
+// IntegrationCodecClientPtr
+// HttpIntegrationTest::makeHttpConnection(Network::ClientConnectionPtr&& conn) {
+//   auto codec = makeRawHttpConnection(std::move(conn));
+//   EXPECT_TRUE(codec->connected());
+//   return codec;
+// }
 
-HttpIntegrationTest::HttpIntegrationTest(Http::CodecClient::Type downstream_protocol,
-                                         Network::Address::IpVersion version,
-                                         TestTimeSystemPtr time_system, const std::string& config)
-    : BaseIntegrationTest(version, std::move(time_system), config),
-      downstream_protocol_(downstream_protocol) {
-  // Legacy integration tests expect the default listener to be named "http" for lookupPort calls.
-  config_helper_.renameListener("http");
-  config_helper_.setClientCodec(typeToCodecType(downstream_protocol_));
-}
+// HttpIntegrationTest::HttpIntegrationTest(Http::CodecClient::Type downstream_protocol,
+//                                          Network::Address::IpVersion version,
+//                                          const std::string& config)
+//     : BaseIntegrationTest(version, config),
+//       downstream_protocol_(downstream_protocol) {
+//   // Legacy integration tests expect the default listener to be named "http" for lookupPort calls.
+//   config_helper_.renameListener("http");
+//   config_helper_.setClientCodec(typeToCodecType(downstream_protocol_));
+// }
 
-HttpIntegrationTest::~HttpIntegrationTest() {
-  cleanupUpstreamAndDownstream();
-  test_server_.reset();
-  fake_upstream_connection_.reset();
-  fake_upstreams_.clear();
-}
+// HttpIntegrationTest::~HttpIntegrationTest() {
+//   cleanupUpstreamAndDownstream();
+//   test_server_.reset();
+//   fake_upstream_connection_.reset();
+//   fake_upstreams_.clear();
+// }
 
-void HttpIntegrationTest::setDownstreamProtocol(Http::CodecClient::Type downstream_protocol) {
-  downstream_protocol_ = downstream_protocol;
-  config_helper_.setClientCodec(typeToCodecType(downstream_protocol_));
-}
+// void HttpIntegrationTest::setDownstreamProtocol(Http::CodecClient::Type downstream_protocol) {
+//   downstream_protocol_ = downstream_protocol;
+//   config_helper_.setClientCodec(typeToCodecType(downstream_protocol_));
+// }
 
-IntegrationStreamDecoderPtr HttpIntegrationTest::sendRequestAndWaitForResponse(
-    const Http::TestHeaderMapImpl& request_headers, uint32_t request_body_size,
-    const Http::TestHeaderMapImpl& response_headers, uint32_t response_size) {
-  ASSERT(codec_client_ != nullptr);
-  // Send the request to Envoy.
-  IntegrationStreamDecoderPtr response;
-  if (request_body_size) {
-    response = codec_client_->makeRequestWithBody(request_headers, request_body_size);
-  } else {
-    response = codec_client_->makeHeaderOnlyRequest(request_headers);
-  }
-  waitForNextUpstreamRequest();
-  // Send response headers, and end_stream if there is no response body.
-  upstream_request_->encodeHeaders(response_headers, response_size == 0);
-  // Send any response data, with end_stream true.
-  if (response_size) {
-    upstream_request_->encodeData(response_size, true);
-  }
-  // Wait for the response to be read by the codec client.
-  response->waitForEndStream();
-  return response;
-}
+// IntegrationStreamDecoderPtr HttpIntegrationTest::sendRequestAndWaitForResponse(
+//     const Http::TestHeaderMapImpl& request_headers, uint32_t request_body_size,
+//     const Http::TestHeaderMapImpl& response_headers, uint32_t response_size) {
+//   ASSERT(codec_client_ != nullptr);
+//   // Send the request to Envoy.
+//   IntegrationStreamDecoderPtr response;
+//   if (request_body_size) {
+//     response = codec_client_->makeRequestWithBody(request_headers, request_body_size);
+//   } else {
+//     response = codec_client_->makeHeaderOnlyRequest(request_headers);
+//   }
+//   waitForNextUpstreamRequest();
+//   // Send response headers, and end_stream if there is no response body.
+//   upstream_request_->encodeHeaders(response_headers, response_size == 0);
+//   // Send any response data, with end_stream true.
+//   if (response_size) {
+//     upstream_request_->encodeData(response_size, true);
+//   }
+//   // Wait for the response to be read by the codec client.
+//   response->waitForEndStream();
+//   return response;
+// }
 
-void HttpIntegrationTest::cleanupUpstreamAndDownstream() {
-  // Close the upstream connection first. If there's an outstanding request,
-  // closing the client may result in a FIN being sent upstream, and FakeConnectionBase::close
-  // will interpret that as an unexpected disconnect. The codec client is not
-  // subject to the same failure mode.
-  if (fake_upstream_connection_) {
-    AssertionResult result = fake_upstream_connection_->close();
-    RELEASE_ASSERT(result, result.message());
-    result = fake_upstream_connection_->waitForDisconnect();
-    RELEASE_ASSERT(result, result.message());
-  }
-  if (codec_client_) {
-    codec_client_->close();
-  }
-}
+// void HttpIntegrationTest::cleanupUpstreamAndDownstream() {
+//   // Close the upstream connection first. If there's an outstanding request,
+//   // closing the client may result in a FIN being sent upstream, and FakeConnectionBase::close
+//   // will interpret that as an unexpected disconnect. The codec client is not
+//   // subject to the same failure mode.
+//   if (fake_upstream_connection_) {
+//     AssertionResult result = fake_upstream_connection_->close();
+//     RELEASE_ASSERT(result, result.message());
+//     result = fake_upstream_connection_->waitForDisconnect();
+//     RELEASE_ASSERT(result, result.message());
+//   }
+//   if (codec_client_) {
+//     codec_client_->close();
+//   }
+// }
 
-uint64_t
-HttpIntegrationTest::waitForNextUpstreamRequest(const std::vector<uint64_t>& upstream_indices) {
-  uint64_t upstream_with_request;
-  // If there is no upstream connection, wait for it to be established.
-  if (!fake_upstream_connection_) {
-    AssertionResult result = AssertionFailure();
-    for (auto upstream_index : upstream_indices) {
-      result = fake_upstreams_[upstream_index]->waitForHttpConnection(*dispatcher_,
-                                                                      fake_upstream_connection_);
-      if (result) {
-        upstream_with_request = upstream_index;
-        break;
-      }
-    }
-    RELEASE_ASSERT(result, result.message());
-  }
-  // Wait for the next stream on the upstream connection.
-  AssertionResult result =
-      fake_upstream_connection_->waitForNewStream(*dispatcher_, upstream_request_);
-  RELEASE_ASSERT(result, result.message());
-  // Wait for the stream to be completely received.
-  result = upstream_request_->waitForEndStream(*dispatcher_);
-  RELEASE_ASSERT(result, result.message());
+// uint64_t
+// HttpIntegrationTest::waitForNextUpstreamRequest(const std::vector<uint64_t>& upstream_indices) {
+//   uint64_t upstream_with_request;
+//   // If there is no upstream connection, wait for it to be established.
+//   if (!fake_upstream_connection_) {
+//     AssertionResult result = AssertionFailure();
+//     for (auto upstream_index : upstream_indices) {
+//       result = fake_upstreams_[upstream_index]->waitForHttpConnection(*dispatcher_,
+//                                                                       fake_upstream_connection_);
+//       if (result) {
+//         upstream_with_request = upstream_index;
+//         break;
+//       }
+//     }
+//     RELEASE_ASSERT(result, result.message());
+//   }
+//   // Wait for the next stream on the upstream connection.
+//   AssertionResult result =
+//       fake_upstream_connection_->waitForNewStream(*dispatcher_, upstream_request_);
+//   RELEASE_ASSERT(result, result.message());
+//   // Wait for the stream to be completely received.
+//   result = upstream_request_->waitForEndStream(*dispatcher_);
+//   RELEASE_ASSERT(result, result.message());
 
-  return upstream_with_request;
-}
+//   return upstream_with_request;
+// }
 
-void HttpIntegrationTest::waitForNextUpstreamRequest(uint64_t upstream_index) {
-  waitForNextUpstreamRequest(std::vector<uint64_t>({upstream_index}));
-}
+// void HttpIntegrationTest::waitForNextUpstreamRequest(uint64_t upstream_index) {
+//   waitForNextUpstreamRequest(std::vector<uint64_t>({upstream_index}));
+// }
 
 void HttpIntegrationTest::testRouterRequestAndResponseWithBody(
     uint64_t request_size, uint64_t response_size, bool big_header,
