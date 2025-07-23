@@ -2217,6 +2217,7 @@ message RateLimit {
   message Override {
     // Fetches the override from the dynamic metadata.
     message DynamicMetadata {
+      // TODO(talnordan)
       // Metadata struct that defines the key and path to retrieve the struct value.
       // The value must be a struct containing an integer "requests_per_unit" property
       // and a "unit" property with a value parseable to :ref:`RateLimitUnit

@@ -107,11 +107,14 @@ message RateLimitResponse {
     // A name or description of this limit.
     string name = 3;
 
-    // The number of requests per unit of time.
+    // The number of requests per time window.
     uint32 requests_per_unit = 1;
 
     // The unit of time.
     Unit unit = 2;
+
+    // The time interval of a window in the specified unit.
+    uint32 interval = 3;
   }
 
   // Cacheable quota for responses.
@@ -154,7 +157,7 @@ message RateLimitResponse {
     // The current limit as configured by the server. Useful for debugging, etc.
     RateLimit current_limit = 2;
 
-    // The limit remaining in the current time unit.
+    // The limit remaining in the current time interval.
     uint32 limit_remaining = 3;
 
     // Duration until reset of the current limit window.

@@ -1110,6 +1110,7 @@ filter_metadata:
     test:
       requests_per_unit: 42
       unit: HOUR
+      interval: 1
   )EOF";
 
   TestUtility::loadFromYaml(metadata_yaml, stream_info_.dynamicMetadata());
@@ -1142,6 +1143,7 @@ filter_metadata:
     test:
       requests_per_unit: 42
       unit: HOUR
+      interval: 1
   )EOF";
 
   TestUtility::loadFromYaml(metadata_yaml, stream_info_.dynamicMetadata());
@@ -1198,6 +1200,7 @@ filter_metadata:
     test:
       requests_per_unit: 42
       unit: NOT_A_UNIT
+      interval: 1
   )EOF";
 
   TestUtility::loadFromYaml(metadata_yaml, stream_info_.dynamicMetadata());

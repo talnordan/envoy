@@ -84,6 +84,9 @@ message RateLimitResponse {
 
     // The unit of time.
     Unit unit = 2;
+
+    // The time interval in the specified unit.
+    uint32 interval = 3;
   }
 
   message DescriptorStatus {
@@ -93,7 +96,7 @@ message RateLimitResponse {
     // The current limit as configured by the server. Useful for debugging, etc.
     RateLimit current_limit = 2;
 
-    // The limit remaining in the current time unit.
+    // The limit remaining in the current time interval.
     uint32 limit_remaining = 3;
   }
 

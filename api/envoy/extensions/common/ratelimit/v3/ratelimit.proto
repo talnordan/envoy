@@ -113,11 +113,14 @@ message RateLimitDescriptor {
   // configured in the rate limit service. See :ref:`rate limit override
   // <config_http_filters_rate_limit_rate_limit_override>` for more information.
   message RateLimitOverride {
-    // The number of requests per unit of time.
+    // The number of requests per time window.
     uint32 requests_per_unit = 1;
 
     // The unit of time.
     type.v3.RateLimitUnit unit = 2 [(validate.rules).enum = {defined_only: true}];
+
+    // The time interval of a window in the specified unit.
+    uint32 interval = 3 [(validate.rules).uint32 = {gte: 1}]; // TODO(talnordan): lte: ???
   }
 
   // Descriptor entries.

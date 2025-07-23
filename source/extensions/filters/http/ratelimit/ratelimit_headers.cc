@@ -29,7 +29,11 @@ Http::ResponseHeaderMapPtr XRateLimitHeaderUtils::create(
         status.limit_remaining() < min_remaining_limit_status.value().limit_remaining()) {
       min_remaining_limit_status.emplace(status);
     }
-    const uint32_t window = convertRateLimitUnit(status.current_limit().unit());
+
+    const auto& unit = status.current_limit().unit();
+    const auto& interval = status.current_limit().interval();
+    const uint32_t window = interval * convertRateLimitUnit(unit);
+
     // Constructing the quota-policy per RFC
     // https://tools.ietf.org/id/draft-polli-ratelimit-headers-02.html#name-ratelimit-limit
     // Example of the result: `, 10;w=1;name="per-ip", 1000;w=3600`

@@ -67,14 +67,18 @@ bool DynamicMetadataRateLimitOverride::populateOverride(
   const auto& override_value = metadata_value.struct_value().fields();
   const auto& limit_it = override_value.find("requests_per_unit");
   const auto& unit_it = override_value.find("unit");
+  const auto& interval_it = override_value.find("interval");
   if (limit_it != override_value.end() &&
       limit_it->second.kind_case() == ProtobufWkt::Value::kNumberValue &&
       unit_it != override_value.end() &&
-      unit_it->second.kind_case() == ProtobufWkt::Value::kStringValue) {
+      unit_it->second.kind_case() == ProtobufWkt::Value::kStringValue &&
+      interval_it != override_value.end() &&
+      interval_it->second.kind_case() == ProtobufWkt::Value::kNumberValue) {
     envoy::type::v3::RateLimitUnit unit;
     if (envoy::type::v3::RateLimitUnit_Parse(unit_it->second.string_value(), &unit)) {
-      descriptor.limit_.emplace(RateLimit::RateLimitOverride{
-          static_cast<uint32_t>(limit_it->second.number_value()), unit});
+      const uint32_t limit = static_cast<uint32_t>(limit_it->second.number_value());
+      const uint32_t interval = static_cast<uint32_t>(interval_it->second.number_value());
+      descriptor.limit_.emplace(RateLimit::RateLimitOverride{limit, unit, interval});
       return true;
     }
   }

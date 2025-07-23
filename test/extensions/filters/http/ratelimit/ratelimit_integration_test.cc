@@ -403,9 +403,9 @@ TEST_P(RatelimitFilterHeadersEnabledIntegrationTest, OkWithFilterHeaders) {
 
   Extensions::Filters::Common::RateLimit::DescriptorStatusList descriptor_statuses{
       Envoy::RateLimit::buildDescriptorStatus(
-          1, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::MINUTE, "first", 2, 3),
+          1, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::MINUTE, 1, "first", 2, 3),
       Envoy::RateLimit::buildDescriptorStatus(
-          4, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::HOUR, "second", 5, 6)};
+          4, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::HOUR, 1, "second", 5, 6)};
   sendRateLimitResponse(envoy::service::ratelimit::v3::RateLimitResponse::OK, descriptor_statuses,
                         Http::TestResponseHeaderMapImpl{}, Http::TestRequestHeaderMapImpl{}, 0);
   waitForSuccessfulUpstreamResponse(0);
@@ -439,9 +439,9 @@ TEST_P(RatelimitFilterHeadersEnabledIntegrationTest, OverLimitWithFilterHeaders)
 
   Extensions::Filters::Common::RateLimit::DescriptorStatusList descriptor_statuses{
       Envoy::RateLimit::buildDescriptorStatus(
-          1, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::MINUTE, "first", 2, 3),
+          1, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::MINUTE, 1, "first", 2, 3),
       Envoy::RateLimit::buildDescriptorStatus(
-          4, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::HOUR, "second", 5, 6)};
+          4, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::HOUR, 1, "second", 5, 6)};
   sendRateLimitResponse(envoy::service::ratelimit::v3::RateLimitResponse::OVER_LIMIT,
                         descriptor_statuses, Http::TestResponseHeaderMapImpl{},
                         Http::TestRequestHeaderMapImpl{}, 0);

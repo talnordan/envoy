@@ -106,6 +106,7 @@ The following configuration
 
 .. _config_http_filters_rate_limit_override_dynamic_metadata:
 
+# TODO(talnordan)
 Will lookup the value of the dynamic metadata. The value must be a structure with integer field
 "requests_per_unit" and a string field "unit" which is parseable to :ref:`RateLimitUnit enum
 <envoy_v3_api_enum_type.v3.RateLimitUnit>`. For example, with the following dynamic metadata

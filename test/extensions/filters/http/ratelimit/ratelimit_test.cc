@@ -509,9 +509,9 @@ TEST_F(HttpRateLimitFilterTest, OkResponseWithFilterHeaders) {
 
   auto descriptor_statuses = {
       Envoy::RateLimit::buildDescriptorStatus(
-          1, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::MINUTE, "first", 2, 3),
+          1, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::MINUTE, 1, "first", 2, 3),
       Envoy::RateLimit::buildDescriptorStatus(
-          4, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::HOUR, "second", 5, 6)};
+          4, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::HOUR, 1, "second", 5, 6)};
   auto descriptor_statuses_ptr =
       std::make_unique<Filters::Common::RateLimit::DescriptorStatusList>(descriptor_statuses);
   request_callbacks_->complete(Filters::Common::RateLimit::LimitStatus::OK,
@@ -1012,9 +1012,9 @@ TEST_F(HttpRateLimitFilterTest, LimitResponseWithFilterHeaders) {
 
   auto descriptor_statuses = {
       Envoy::RateLimit::buildDescriptorStatus(
-          1, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::MINUTE, "first", 2, 3),
+          1, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::MINUTE, 1, "first", 2, 3),
       Envoy::RateLimit::buildDescriptorStatus(
-          4, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::HOUR, "second", 5, 6)};
+          4, envoy::service::ratelimit::v3::RateLimitResponse::RateLimit::HOUR, 1, "second", 5, 6)};
   auto descriptor_statuses_ptr =
       std::make_unique<Filters::Common::RateLimit::DescriptorStatusList>(descriptor_statuses);
   request_callbacks_->complete(Filters::Common::RateLimit::LimitStatus::OverLimit,
